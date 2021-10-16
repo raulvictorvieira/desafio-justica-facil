@@ -1,4 +1,5 @@
 import requests
+from requests.sessions import Session
 
 cookies = {
     '__utmz': '60534895.1633476064.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)',
@@ -34,11 +35,15 @@ params = (
     ('argumento', ''),
 )
 
+session = requests.Session()
+
+session.get('http://www.stf.jus.br/portal/diariojusticaeletronico/pesquisardiarioeletronico.asp', headers=headers)
+
+response = requests.get('http://www.stf.jus.br/portal/diariojusticaeletronico/montarDiarioEletronico.asp', headers=headers, params=params)
+
 main_url =  'http://www.stf.jus.br/portal/diariojusticaeletronico/'
 
 response2 = requests.get(main_url + 'verDiarioEletronico.asp?seq=757632168&data=05/10/2021&ano=2021&numero=199', headers=headers, params=params)
 
 pdf = open('file.pdf', 'wb')
 pdf.write(response2.content)
-
-#import pdb; pdb.set_trace()
