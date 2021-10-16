@@ -22,6 +22,10 @@ def md5_creator (file):
         hashlib.md5(file).hexdigest()
         return
 
+def save_pdf (file):
+        save_pdf = open('diario.pdf', 'wb')
+        save_pdf.write(file)
+
 response = get_page(main_url)
 html_response = response.content
 
@@ -33,4 +37,4 @@ pdf_file = requests.get(f'{main_url}/{link.strip()}', headers=headers, params=pa
 
 pdf_file_md5 = md5_creator(pdf_file)
 
-
+save_pdf(pdf_file)
