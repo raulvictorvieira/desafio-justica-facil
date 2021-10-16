@@ -33,6 +33,7 @@ html_response = response.content
 table = BeautifulSoup(html_response, 'html.parser')
 link = table.find('a').get('href')
 
+#quando localizo a tag <a> com o href desejado, vem um grande espaço antes do link. Então utilizei o .strip() para retirar este espaço do início a não quebrar o meu get
 pdf_file = requests.get(f'{main_url}/{link.strip()}', headers=headers, params=params).content
 
 pdf_file_md5 = md5_creator(pdf_file)
