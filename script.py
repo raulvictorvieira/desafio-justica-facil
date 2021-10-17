@@ -46,5 +46,7 @@ if response.status_code == 200:
                 print('Arquivo não salvo!')
         else:
                 print('Opção inválida!')
+
+        print('Finalizando...')
 else:
         print(f'ERROR {response.status_code}... Data inválida ou página não encontrado!')
