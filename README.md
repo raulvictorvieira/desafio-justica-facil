@@ -2,8 +2,6 @@
 
 Desafio em Python para a vaga de estágio da Justiça Fácil
 
-<hr>
-
 ## Documentação :blue_book:
 
 ## Relatório :orange_book:

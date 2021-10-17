@@ -19,23 +19,26 @@ def get_page (url):
         return r
 
 def md5_creator (file):
-        hashlib.md5(file).hexdigest()
-        return
+        return hashlib.md5(file).hexdigest()
 
 def save_pdf (file):
-        save_pdf = open('diario.pdf', 'wb')
+        save_pdf = open(f'{pdf_file_md5}.pdf', 'wb')
         save_pdf.write(file)
 
 response = get_page(main_url)
-html_response = response.content
 
+if response.status_code == 200:
+        html_response = response.content
 
-table = BeautifulSoup(html_response, 'html.parser')
-link = table.find('a').get('href')
+        table = BeautifulSoup(html_response, 'html.parser')
+        link = table.find('a').get('href')
 
-#quando localizo a tag <a> com o href desejado, vem um grande espaço antes do link. Então utilizei o .strip() para retirar este espaço do início a não quebrar o meu get
-pdf_file = requests.get(f'{main_url}/{link.strip()}', headers=headers, params=params).content
+        #quando localizo a tag <a> com o href desejado, vem um grande espaço antes do link. Então utilizei o .strip() para retirar este espaço do início e não quebrar o meu get
+        pdf_file = requests.get(f'{main_url}/{link.strip()}', headers=headers, params=params).content
 
-pdf_file_md5 = md5_creator(pdf_file)
+        pdf_file_md5 = md5_creator(pdf_file)
 
-save_pdf(pdf_file)
+        save_pdf(pdf_file)
+        print(f'Arquivo {pdf_file_md5} salvo com sucesso!')
+else:
+        print(f'ERROR {response.status_code}!! Data inválida ou servidor não encontrado!')
