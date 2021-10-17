@@ -15,15 +15,14 @@ params = (
 )
 
 def get_page (url):
-        r = requests.get(url + 'montarDiarioEletronico.asp', headers=headers, params=params)
-        return r
+        return requests.get(url + 'montarDiarioEletronico.asp', headers=headers, params=params)
 
 def md5_creator (file):
         return hashlib.md5(file).hexdigest()
 
 def save_pdf (file):
-        save_pdf = open(f'{pdf_file_md5}.pdf', 'wb')
-        save_pdf.write(file)
+        file_pdf = open(f'{md5_pdf_file}.pdf', 'wb')
+        file_pdf.write(file)
 
 response = get_page(main_url)
 
@@ -34,11 +33,18 @@ if response.status_code == 200:
         link = table.find('a').get('href')
 
         #quando localizo a tag <a> com o href desejado, vem um grande espaço antes do link. Então utilizei o .strip() para retirar este espaço do início e não quebrar o meu get
-        pdf_file = requests.get(f'{main_url}/{link.strip()}', headers=headers, params=params).content
+        raw_pdf_file = requests.get(f'{main_url}/{link.strip()}', headers=headers, params=params).content
 
-        pdf_file_md5 = md5_creator(pdf_file)
+        md5_pdf_file = md5_creator(raw_pdf_file)
+        print(md5_pdf_file)
 
-        save_pdf(pdf_file)
-        print(f'Arquivo {pdf_file_md5} salvo com sucesso!')
+        save = input('Deseja salvar o arquivo em pasta local? 1-Sim 2-Não: ')
+        if save == '1':
+                save_pdf(raw_pdf_file)
+                print(f'Arquivo {md5_pdf_file} salvo com sucesso!')
+        elif save == '2':
+                print('Arquivo não salvo!')
+        else:
+                print('Opção inválida!')
 else:
-        print(f'ERROR {response.status_code}!! Data inválida ou servidor não encontrado!')
+        print(f'ERROR {response.status_code}... Data inválida ou página não encontrado!')
